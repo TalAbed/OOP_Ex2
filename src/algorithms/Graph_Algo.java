@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
 import dataStructure.DGraph;
+import dataStructure.Node;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
@@ -157,14 +159,41 @@ public class Graph_Algo implements graph_algorithms{
 
 	@Override
 	public List<node_data> TSP(List<Integer> targets) {
-		// TODO Auto-generated method stub
-		return null;
+		LinkedList <node_data> path = new LinkedList <node_data>();
+		LinkedList <node_data> temp;
+		if (targets.size()==1)
+			return null;
+		for (int i=0;i<targets.size();i++) {
+			try {
+				temp = (LinkedList<node_data>) shortestPath(targets.get(i),targets.get(i+1));
+			}
+			catch (RuntimeException e) {
+				System.out.println("out of index");
+				return null;
+			}
+			if (temp==null)
+				return null;
+			else if (temp.size()>1 && path.contains(graph.getNode(targets.get(i))))
+				temp.remove(graph.getNode(targets.get(i)));
+			path.addAll(temp);
+		}
+		return path;
 	}
 
 	@Override
 	public graph copy() {
-		// TODO Auto-generated method stub
-		return null;
+		graph g = new DGraph();
+		for (node_data nd : this.graph.getV()) {
+			Node n = (Node)nd;
+			g.addNode(n);
+		}
+		for (node_data nd : this.graph.getV()) {
+			if (this.graph.getE(nd.getKey())!=null) {
+				for (edge_data ed : this.graph.getE(nd.getKey()))
+					g.connect(ed.getSrc(), ed.getDest(), ed.getWeight());
+			}
+		}
+		return g;
 	}
 
 }
