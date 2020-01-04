@@ -2,13 +2,14 @@ package dataStructure;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class DGraph implements graph{
 	
-	HashMap <Integer, HashMap<Integer, edge_data>> edgeMap = new HashMap <Integer, HashMap<Integer, edge_data>>();
-	HashMap <Integer, node_data> nodeMap = new HashMap <Integer, node_data>();
-	int McCounter = 0;
-	int edgeCounter = 0;
+	private HashMap <Integer, HashMap<Integer, edge_data>> edgeMap = new HashMap <Integer, HashMap<Integer, edge_data>>();
+	private HashMap <Integer, node_data> nodeMap = new HashMap <Integer, node_data>();
+	private int McCounter = 0;
+	private int edgeCounter = 0;
 
 	@Override
 	public node_data getNode(int key) {
@@ -27,6 +28,7 @@ public class DGraph implements graph{
 	@Override
 	public void addNode(node_data n) {
 		nodeMap.put(n.getKey(), n);
+		
 	}
 
 	@Override
@@ -48,7 +50,21 @@ public class DGraph implements graph{
 
 	@Override
 	public node_data removeNode(int key) {
-		return null;
+		node_data n1 = this.getNode(key);
+		if (n1!=null) {
+			for (Iterator<node_data> it = this.getV().iterator();it.hasNext();) {
+				node_data n2 = (node_data) it.next();
+				this.removeEdge(n2.getKey(), key);
+			}
+			if (edgeMap.get(key)!=null) {
+				edgeCounter -= edgeMap.get(key).size();
+				McCounter += edgeMap.get(key).size();
+			}
+			nodeMap.remove(key);
+			edgeMap.remove(key);
+			McCounter++;
+		}
+		return n1;
 	}
 
 	@Override
