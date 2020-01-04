@@ -17,6 +17,11 @@ public class Node implements node_data {
 		this.info = n.info;
 		this.tag = n.tag;
 	}
+	public Node(int key,Point3D p,double weight)
+    {
+        this.key = key;
+        this.location = new Point3D(p);
+    }
 
 	public Node(int key, Point3D location, double weight, String info, int tag) {
 		super();

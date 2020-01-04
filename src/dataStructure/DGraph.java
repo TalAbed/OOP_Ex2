@@ -33,10 +33,25 @@ public class DGraph implements graph{
 
 	@Override
 	public void connect(int src, int dest, double w) {
-		if (src==dest)
-			throw new RuntimeException ("Error - src or dest does not exist");
-		edge_data e = new Edge (src, dest, w);
-		edgeMap.get(src).put(dest, e);
+		boolean b = true;
+		if (src==dest) {
+			System.out.println("src and dest are equals");
+			b = false;
+		}
+		if (b || (!(nodeMap.get(src)==null) || !(nodeMap.get(dest)==null))) {
+			if (edgeMap.containsKey(src)) {
+				if (edgeMap.get(src).get(dest) != null)
+					throw new RuntimeException ("this edge is already exist");
+				else {
+					edge_data ed = new Edge (src, dest, w);
+					this.edgeMap.get(src).put(dest, ed);
+					McCounter++;
+					edgeCounter++;
+				}
+			}
+			else if (b)
+				throw new RuntimeException ("src or dest is not exist");
+		}
 	}
 
 	public Collection<node_data> getV() {
