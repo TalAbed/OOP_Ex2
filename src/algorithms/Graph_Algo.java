@@ -198,6 +198,12 @@ public class Graph_Algo implements graph_algorithms{
 		}
 		return g;
 	}
+	public DGraph getGraph() {
+		return (DGraph)this.graph;
+	}
+	public void setGraph(DGraph gr) {
+        this.graph = gr;		
+	}
 
 }
 

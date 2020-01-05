@@ -56,9 +56,8 @@ class Ex2Test {
 		return ans;
 	}
 	boolean drawGraph(graph g) { 
-		GRAPH_GUI.draw(g);
-		return true;
-		
+		GRAPH_GUI graph = new GRAPH_GUI(g);
+        return true;
 	}
 
 }

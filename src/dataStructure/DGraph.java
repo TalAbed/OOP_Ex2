@@ -1,5 +1,6 @@
 package dataStructure;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,13 +39,20 @@ public class DGraph implements graph{
 			System.out.println("src and dest are equals");
 			b = false;
 		}
-		if (b || (!(nodeMap.get(src)==null) || !(nodeMap.get(dest)==null))) {
-			if (edgeMap.containsKey(src)) {
-				if (edgeMap.get(src).get(dest) != null)
+		if (b || ((nodeMap.get(src)!=null) || (nodeMap.get(dest)!=null))) {
+			if (!nodeMap.containsKey(src)||nodeMap.containsKey(dest)) {
+				if (edgeMap.containsKey(src)&&edgeMap.get(src).get(dest) != null)
 					throw new RuntimeException ("this edge is already exist");
 				else {
 					edge_data ed = new Edge (src, dest, w);
-					this.edgeMap.get(src).put(dest, ed);
+					if(edgeMap.containsKey(src)) {
+						this.edgeMap.get(src).put(dest, ed);
+					}
+					else {
+						HashMap<Integer, edge_data> value=new HashMap<Integer, edge_data>();
+						value.put(dest, ed);
+						this.edgeMap.put(src, value);
+					}
 					McCounter++;
 					edgeCounter++;
 				}
@@ -55,12 +63,16 @@ public class DGraph implements graph{
 	}
 
 	public Collection<node_data> getV() {
-		return nodeMap.values();
+		Collection<node_data> list = new ArrayList<node_data>(nodeMap.values());
+		return list;
 	}
 
 	@Override
 	public Collection<edge_data> getE(int node_id) {
-		return edgeMap.get(nodeMap.get(node_id)).values();
+		if (edgeMap.get(node_id) != null) {
+			return edgeMap.get(node_id).values();
+		}
+		return null;
 	}
 
 	@Override
